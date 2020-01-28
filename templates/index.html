@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <title>Visualizations and Querying</title>
+	    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    	<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+</head>
+<body>
+		<h1 style="text-align:center;">Visualizations</h1>
+		<div class="ct-chart" id="chart1"></div>
+		<div class="ct-chart" id="chart2"></div>
+		
+	
+		<button onclick="show_data()">Click here</button>
+		
+		<script>
+		var data = {
+		  // A labels array that can contain any sort of values
+		labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+		  // Our series array that contains series objects or in this case series data arrays
+		series: [
+			[5, 2, 4, 2, 0]
+		  ]
+		};
+
+		var options = {
+		  width: 900,
+		  height: 600
+		};
+
+		// Create a new line chart object where as first parameter we pass in a selector
+		// that is resolving to our chart container element. The Second parameter
+		// is the actual data object.
+		function loadDoc() {
+			new Chartist.Bar('#chart1', data , options);
+			new Chartist.Line('#chart2', data , options);
+		}
+
+		function show_data() {
+			var req = new XMLHttpRequest();
+			req.onreadystatechange = function() {
+				if(this.readyState == 4 && this.status == 200){
+						var obj = JSON.parse(this.responseText);
+						var data = {
+						  // A labels array that can contain any sort of values
+							labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+						  // Our series array that contains series objects or in this case series data arrays
+							series: [obj.monthly_data]
+						};
+
+						var options = {
+						  width: 800,
+						  height: 600
+						};
+						new Chartist.Bar('#chart1', data , options);
+						new Chartist.Line('#chart2', data , options);
+				}
+			};
+			req.open("GET","/api/year",true);
+			req.send();
+		}
+		
+		</script>
+</body>
+</html>
