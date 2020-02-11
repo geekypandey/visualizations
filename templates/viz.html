@@ -19,9 +19,10 @@
 	<div class="container">
 		<div class="row">
 			<div class="embed-responsive embed-responsive-4by3 col-sm-12 col-md-6">
-				<video src="static/free_solo.mp4" type="video/mp4"controls>
+				<video id="output_video" src="http://10.208.10.44:8080" type="video/mp4" autoplay>
 				Your browser doesn't support video tag
 				</video>
+				<button type="button" onclick="reload()">Reload</button>
 			</div>
 			<div class="ct-chart col-sm-12 col-md-6" id="chart1">
 				<div class="btn-group" role="group" aria-label="Basic example">
@@ -37,6 +38,7 @@
 		// Create a new line chart object where as first parameter we pass in a selector
 		// that is resolving to our chart container element. The Second parameter
 		// is the actual data object.
+
 		function show_monthly() {
 			
 			var labels = [];

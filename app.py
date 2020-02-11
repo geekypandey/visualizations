@@ -37,19 +37,13 @@ class TimeData(db.Model):
 def index():
     return render_template("index.html")
 
+@app.route('/test')
+def testing():
+    return render_template('test.html')
 @app.route("/api/year")
 def monthly_data():
     dat = db.engine.execute("select sum(read_count) from time_data group by strftime('%m',timestamp)")
     monthly_data = [x[0] for x in dat]
-    #datas = TimeData.query.all()
-    #if datas:
-    #    month_dict = {}
-    #    for data in datas:
-    #        if str(data.timestamp.month) not in month_dict:
-    #            month_dict[str(data.timestamp.month)] = data.read_count
-    #        else:
-    #            month_dict[str(data.timestamp.month)] += data.read_count
-    #monthly_data = [x for x in month_dict.values()]
     return jsonify({"monthly_data":monthly_data})
 
 @app.route("/api/weekly")
@@ -62,35 +56,12 @@ def weekly_data():
     datas = [x[0] for x in dat]
     datas[0],datas[1]  = datas[1],datas[0]
     weekly_data = datas
-    #datas = TimeData.query.all()
-    #if datas:
-    #    weekly_dict = {}
-    #    curr = date.today()
-    #    start_of_week = curr - timedelta(days=curr.weekday())
-    #    end_of_week = start_of_week + timedelta(days=6)
-    #    for data in datas:
-    #        if start_of_week <= data.timestamp.date() <= end_of_week : 
-    #            if data.timestamp.weekday() not in weekly_dict:
-    #                weekly_dict[data.timestamp.weekday()] = data.read_count
-    #            else:
-    #                weekly_dict[data.timestamp.weekday()] += data.read_count
-    #    weekly_data = [x for x in weekly_dict.values()]
     return jsonify({"weekly_data":weekly_data})
 
 @app.route("/api/daily")
 def daily_data():
     datas = db.engine.execute("select sum(read_count) from time_data where date(timestamp) = date('now') group by strftime('%H',timestamp)")    
     daily_data = [x[0] for x in datas]
-    #daily_dict = {}
-    #if datas:   
-    #    curr = date.today()
-    #    for data in datas:
-    #        if data.timestamp.date() == curr :
-    #            if data.timestamp.hour not in daily_dict:
-    #                daily_dict[data.timestamp.hour] = data.read_count
-    #            else:
-    #                daily_dict[data.timestamp.hour] += data.read_count
-    #daily_data = [x for x in daily_dict.values()]
     return jsonify({"daily_data":daily_data})
 
 @app.route("/viz")
